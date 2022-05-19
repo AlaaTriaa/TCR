@@ -1,0 +1,90 @@
+# backend deployment
+apiVersion: apps/v1                                   #api version
+kind: Deployment                                      #Type of kubernetes resource
+
+metadata:
+  name: tcr-app-server-deploy                        #Name of kubernetes resource
+  namespace: tcr-ns
+  labels :
+    app: tcr-app-server                               # Labels will be applied to this resource
+
+spec:
+  selector:
+    matchLabels:                                     # the deployment applies to any pods matching the specified label
+      app: tcr-app-server
+  replicas: 1                                        # nbr of replicas/podsto run this deployment
+
+
+  template:                                          #template for creating the pods in this deployment
+    metadata:
+      name: tcr-app-server-pod
+      labels:                                        #labels that will be applied to each pod in this deployment
+        app: tcr-app-server
+    spec:            # spec for the containers that will be run in the pods
+
+      containers:
+
+      - name: tcr-app-server
+        image: alaatriaa/backend:v10
+        resources:
+          limits: 
+            memory: 250Mi 
+          requests:
+            memory: 194Mi
+        imagePullPolicy: "IfNotPresent"
+        ports:
+          - containerPort: 9000            # the port that the container exposes
+
+
+
+        livenessProbe:
+          tcpSocket:
+            port: 9000
+          initialDelaySeconds: 15
+          periodSeconds: 20
+          timeoutSeconds: 2
+          failureThreshold: 1
+          successThreshold: 1
+
+
+        env:
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                 name: postgres-secrets
+                 key: username
+
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                 name: postgres-secrets
+                 key: password
+
+          - name: DB_HOST
+            value: "10.105.4.219"
+
+          - name: DB_NAME
+            value: "tcr_db"
+---
+# backend service
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: tcr-app-server
+  name: tcr-app-server-svc
+  namespace: tcr-ns
+
+spec:
+  ports:
+    - name: tcr-app-server
+      port: 9000
+      targetPort: 9000
+      nodePort: 31001
+      protocol : "TCP"
+
+  selector:
+    app: tcr-app-server
+  type: ClusterIP
+                            
