@@ -1,0 +1,23 @@
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: talan-container-registry-app
+  namespace: argocd
+spec:
+  destination:
+    namespace: tcr-ns
+    server: https://kubernetes.default.svc
+  project: tcr-project
+  source:
+    path: kubernetes/
+    repoURL: https://github.com/AlaaTriaa/TCR.git
+    targetRevision: HEAD
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    automated:
+      selfHeal: true
+      prune: true

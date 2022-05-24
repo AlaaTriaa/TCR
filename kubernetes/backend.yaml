@@ -25,27 +25,28 @@ spec:
       containers:
 
       - name: tcr-app-server
-        image: alaatriaa/backend:v10
+        image: alaatriaa/backend:env
         resources:
           limits: 
             memory: 250Mi 
           requests:
             memory: 194Mi
-        imagePullPolicy: "IfNotPresent"
+        imagePullPolicy: IfNotPresent
         ports:
           - containerPort: 9000            # the port that the container exposes
 
-
-
         livenessProbe:
-          tcpSocket:
-            port: 9000
+          exec:
+            command:
+              - echo
+              - "backend svc!!"
           initialDelaySeconds: 15
-          periodSeconds: 20
-          timeoutSeconds: 2
-          failureThreshold: 1
+          periodSeconds: 30
+          failureThreshold: 3
           successThreshold: 1
 
+
+        
 
         env:
           - name: POSTGRES_USER
@@ -61,10 +62,10 @@ spec:
                  key: password
 
           - name: DB_HOST
-            value: "10.105.4.219"
+            value: 10.105.4.219
 
           - name: DB_NAME
-            value: "tcr_db"
+            value: tcr_db
 ---
 # backend service
 
@@ -82,9 +83,9 @@ spec:
       port: 9000
       targetPort: 9000
       nodePort: 31001
-      protocol : "TCP"
+      protocol : TCP
 
   selector:
     app: tcr-app-server
-  type: ClusterIP
+  type: NodePort
                             

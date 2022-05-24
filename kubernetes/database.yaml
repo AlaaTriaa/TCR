@@ -68,11 +68,11 @@ spec:
   ports:
    - port: 5432
      targetPort: 5432
-     nodePort: 31002
+     #nodePort: 31002
   selector:
     app: tcr-app
     tier: postgres
-  type: NodePort
+  type: ClusterIP
 
 
 ---
