@@ -24,7 +24,7 @@ spec:
 
       containers:
       - name: tcr-app-server
-        image: alaatriaa/backend:docker
+        image: alaatriaa/backend:env
         resources:
           limits: 
             memory: 250Mi 
