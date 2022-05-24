@@ -23,15 +23,14 @@ spec:
     spec:            # spec for the containers that will be run in the pods
 
       containers:
-
       - name: tcr-app-server
-        image: alaatriaa/backend:env
+        image: alaatriaa/backend:docker
         resources:
           limits: 
             memory: 250Mi 
           requests:
             memory: 194Mi
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
           - containerPort: 9000            # the port that the container exposes
 
@@ -47,8 +46,8 @@ spec:
 
 
         
-
         env:
+          
           - name: POSTGRES_USER
             valueFrom:
               secretKeyRef:
@@ -65,7 +64,9 @@ spec:
             value: 10.105.4.219
 
           - name: DB_NAME
-            value: tcr_db
+            value: tcr_db     
+
+
 ---
 # backend service
 
@@ -88,4 +89,3 @@ spec:
   selector:
     app: tcr-app-server
   type: NodePort
-                            
