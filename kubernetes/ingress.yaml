@@ -5,15 +5,15 @@ metadata:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/use-regex: "true"
     #nginx.ingress.kubernetes.io/rewrite-target: /$2
-    external-dns.alpha.kubernetes.io/ingress-hostname-source: talan-container-registry.tn
+    
   name: tcr-ingress
   namespace: tcr-ns
   labels:
     name: frontend-ingress
 spec:
-  
+
   rules:
-    - 
+    - host: tcr.example.com
       http:
         paths:
           - path: /
@@ -21,7 +21,6 @@ spec:
             backend:
               service:
                 name: tcr-app-client-svc
-                
                 port:
                   number: 3000
           - path: /backend
@@ -29,6 +28,5 @@ spec:
             backend:
               service:
                 name: tcr-app-server-svc
-                
                 port:
                   number: 9000

@@ -24,7 +24,7 @@ spec:
 
       containers:
       - name: tcr-app-server
-        image: alaatriaa/backend:env
+        image: alaatriaa/backend:docker
         resources:
           limits: 
             memory: 250Mi 
@@ -40,7 +40,7 @@ spec:
               - echo
               - "backend svc!!"
           initialDelaySeconds: 15
-          periodSeconds: 30
+          periodSeconds: 60
           failureThreshold: 3
           successThreshold: 1
 
