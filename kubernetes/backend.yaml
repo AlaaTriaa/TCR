@@ -34,17 +34,6 @@ spec:
         ports:
           - containerPort: 9000            # the port that the container exposes
 
-        livenessProbe:
-          exec:
-            command:
-              - echo
-              - "backend svc!!"
-          initialDelaySeconds: 15
-          periodSeconds: 60
-          failureThreshold: 3
-          successThreshold: 1
-
-
         
         env:
           
